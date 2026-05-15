@@ -11,6 +11,7 @@ function addProductToCart(product) {
   cartContents.push(product);
   setLocalStorage("so-cart", cartContents);
 }
+
 // add to cart button event handler
 async function addToCartHandler(e) {
   const product = await dataSource.findProductById(e.target.dataset.id);
