@@ -20,16 +20,21 @@ export default class ProductDetails {
     }
 
     async renderProductDetails() {
-        const product = await this.dataSource.findProductById(this.productId);
+        // Check if product data is valid and has required properties before rendering
+        if (!this.product || !this.product.Id || !this.product.Brand || !this.product.NameWithoutBrand) {
+            console.error("Product not found");
+            console.log("Product data:", this.product);
+            return;
+        }
 
-        if (product) {
-            document.getElementById("Brand").textContent = product.Brand.Name;
-            document.getElementById("NameWithoutBrand").textContent = product.NameWithoutBrand;
-            document.getElementById("Image").src = product.Image;
-            document.getElementById("ListPrice").textContent = `$${product.ListPrice.toFixed(2)}`;
-            document.getElementById("Colors").textContent = product.Colors.map(color => color.ColorName).join(" | ");
-            console.log(product.Colors.map(color => color.ColorName).join(" | "));
-            document.getElementById("DescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
+        if (this.product) {
+            document.getElementById("Brand").textContent = this.product.Brand.Name;
+            document.getElementById("NameWithoutBrand").textContent = this.product.NameWithoutBrand;
+            document.getElementById("Image").src = this.product.Image;
+            document.getElementById("ListPrice").textContent = `$${this.product.ListPrice.toFixed(2)}`;
+            document.getElementById("Colors").textContent = this.product.Colors.map(color => color.ColorName).join(" | ");
+            console.log(this.product.Colors.map(color => color.ColorName).join(" | "));
+            document.getElementById("DescriptionHtmlSimple").innerHTML = this.product.DescriptionHtmlSimple;
         } else {
             console.error("Product not found");
         }
@@ -47,6 +52,13 @@ export default class ProductDetails {
 
     // add to cart button event handler
     async addToCartHandler() {
+        // Check if product is valid before adding to cart
+        if (!this.product || !this.product.Id) {
+            console.error("No product to add to cart");
+            return;
+        }
+
+        // Add product to cart and log the action
         this.addProductToCart();
         console.log("Product added to cart:", this.product);
     }

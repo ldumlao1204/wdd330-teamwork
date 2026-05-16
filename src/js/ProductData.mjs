@@ -17,6 +17,13 @@ export default class ProductData {
       .then((data) => data);
   }
   async findProductById(id) {
+    // Validate the ID before proceeding
+    if (!id) {
+      console.error("Invalid product ID");
+      return null;
+    }
+
+    // Fetch the product data and find the product by ID
     const products = await this.getData();
     return products.find((item) => item.Id === id);
   }
