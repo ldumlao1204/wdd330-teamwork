@@ -7,5 +7,9 @@ const productId = getParam("product");
 
 console.log(dataSource.findProductById(productId));
 
-const product = new ProductDetails(productId, dataSource);
-await product.init();
+async function initProductPage() {
+    const product = new ProductDetails(productId, dataSource);
+    await product.init();
+}
+
+initProductPage();
