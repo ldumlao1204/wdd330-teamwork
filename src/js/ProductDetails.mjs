@@ -3,20 +3,21 @@ import { setLocalStorage, getLocalStorage, getParam } from "./utils.mjs";
 
 
 export default class ProductDetails {
-  constructor(productId, dataSource) {
-    this.productId = productId;
-    this.product = {}; // Initialize product as an empty object
-    this.dataSource = dataSource;
-  }
+    constructor(productId, dataSource) {
+        this.productId = productId;
+        this.product = {}; // Initialize product as an empty object
+        this.dataSource = dataSource;
+    }
 
     async init() {
         this.product = await this.dataSource.findProductById(this.productId);
         this.renderProductDetails();
+        console.log("here")
 
         // add listener to Add to Cart button
         document
-        .getElementById("addToCart")
-        .addEventListener("click", this.addProductToCart.bind(this));
+            .getElementById("addToCart")
+            .addEventListener("click", this.addProductToCart.bind(this));
     }
 
     async renderProductDetails() {
