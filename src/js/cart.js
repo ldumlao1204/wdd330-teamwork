@@ -25,4 +25,8 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
-renderCartContents();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderCartContents);
+} else {
+  renderCartContents();
+}
