@@ -1,5 +1,5 @@
 // Purpose: This module is responsible for displaying the details of a single product. It retrieves the product data based on the product ID from the URL and renders it on the page.
-import { setLocalStorage, getLocalStorage, getParam } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage } from "./utils.mjs";
 
 
 export default class ProductDetails {
@@ -19,21 +19,13 @@ export default class ProductDetails {
             .addEventListener("click", this.addProductToCart.bind(this));
     }
 
-    async renderProductDetails() {
-        const product = await this.dataSource.findProductById(this.productId);
-
-        if (product) {
-            document.getElementById("Brand").textContent = product.Brand.Name;
-            document.getElementById("NameWithoutBrand").textContent = product.NameWithoutBrand;
-            document.getElementById("Image").src = product.Image;
-            document.getElementById("ListPrice").textContent = `$${product.ListPrice.toFixed(2)}`;
-            document.getElementById("Colors").textContent = product.Colors.map(color => color.ColorName).join(" | ");
-            console.log(product.Colors.map(color => color.ColorName).join(" | "));
-            document.getElementById("DescriptionHtmlSimple").innerHTML = product.DescriptionHtmlSimple;
-        } else {
-            console.error("Product not found");
-        }
-
+    renderProductDetails() {
+        document.getElementById("Brand").textContent = this.product.Brand.Name;
+        document.getElementById("NameWithoutBrand").textContent = this.product.NameWithoutBrand;
+        document.getElementById("Image").src = this.product.Image;
+        document.getElementById("ListPrice").textContent = `$${this.product.ListPrice.toFixed(2)}`;
+        document.getElementById("Colors").textContent = this.product.Colors.map(color => color.ColorName).join(" | ");
+        document.getElementById("DescriptionHtmlSimple").innerHTML = this.product.DescriptionHtmlSimple;
     }
 
     async addProductToCart() {
@@ -43,12 +35,6 @@ export default class ProductDetails {
         }
         cartContents.push(this.product);
         setLocalStorage("so-cart", cartContents);
-    }
-
-    // add to cart button event handler
-    async addToCartHandler() {
-        this.addProductToCart();
-        console.log("Product added to cart:", this.product);
     }
 
 }
