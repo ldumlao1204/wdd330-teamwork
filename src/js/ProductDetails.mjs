@@ -12,6 +12,7 @@ export default class ProductDetails {
     async init() {
         this.product = await this.dataSource.findProductById(this.productId);
         this.renderProductDetails();
+        console.log("here")
 
         // add listener to Add to Cart button
         document
