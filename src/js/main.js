@@ -1,5 +1,6 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
+import { loadHeaderFooter } from "./utils.mjs"  
 
 const dataSource = new ProductData("tents");
 
@@ -11,4 +12,6 @@ async function init() {
     console.log(productList.products); //logs the products for debugging
 }
 
-init();
+init(); 
+
+loadHeaderFooter();
