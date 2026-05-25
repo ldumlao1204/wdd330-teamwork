@@ -1,5 +1,5 @@
 // Purpose: This module is responsible for displaying the details of a single product. It retrieves the product data based on the product ID from the URL and renders it on the page.
-import { setLocalStorage, getLocalStorage } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, renderCartCount } from "./utils.mjs";
 
 
 export default class ProductDetails {
@@ -80,6 +80,7 @@ export default class ProductDetails {
         }
         cartContents.push(this.product);
         setLocalStorage("so-cart", cartContents);
+        renderCartCount();
     }
 
 }
