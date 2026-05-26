@@ -23,7 +23,7 @@ export default class ProductDetails {
     renderProductDetails() {
         document.getElementById("Brand").textContent = this.product.Brand.Name;
         document.getElementById("NameWithoutBrand").textContent = this.product.NameWithoutBrand;
-        document.getElementById("Image").src = this.product.Image;
+        document.getElementById("Image").src = this.product.Images.PrimaryLarge;
         document.getElementById("ListPrice").textContent = `$${this.product.ListPrice.toFixed(2)}`;
         document.getElementById("Colors").textContent = this.product.Colors.map(color => color.ColorName).join(" | ");
         document.getElementById("DescriptionHtmlSimple").innerHTML = this.product.DescriptionHtmlSimple;
