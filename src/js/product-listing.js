@@ -12,4 +12,8 @@ const listElement = document.querySelector(".product-list");
 // then create an instance of the ProductList class and send it the correct information.
 const myList = new ProductList(category, dataSource, listElement);
 // finally call the init method to show the products
+
+const titleElement = document.querySelector(".products__title");
+titleElement.textContent = `Top Products: ${category}`;
+
 myList.init();
