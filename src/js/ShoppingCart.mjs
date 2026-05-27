@@ -1,4 +1,4 @@
-import { renderListWithTemplate, getLocalStorage  } from "./utils.mjs";
+import { renderListWithTemplate, getLocalStorage, renderCartCount  } from "./utils.mjs";
 
 function cartItemTemplate(item) {
     return `
@@ -24,6 +24,7 @@ function removeItem(id) {
     let cartItems = getLocalStorage("so-cart") || [];
     cartItems = cartItems.filter(item => item.Id !== id);
     localStorage.setItem("so-cart", JSON.stringify(cartItems));
+    renderCartCount();
 }
 
 export default class ShoppingCart {
