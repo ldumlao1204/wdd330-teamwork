@@ -1,26 +1,19 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
-import { loadHeaderFooter } from "./utils.mjs"
-import { getParam } from "./utils.mjs";
-
-const category = getParam("category");
-const dataSource = new ProductData();
-
-async function init() {
-    const listElement = document.querySelector(".product-list");
-    const productList = new ProductList(category, dataSource, listElement);
-    await productList.init();
-    productList.render();
-    const categoryTitle = document.getElementById("section-category-title");
-    if (category) {
-        // Add 's' only if it doesn't already end in 's'
-        const formattedCategory = "Top Products: " +category.charAt(0).toUpperCase() + category.slice(1);
-        const displayName = formattedCategory.endsWith('s') ? formattedCategory : formattedCategory + 's';
-        categoryTitle.textContent = displayName;
-    } else {
-        categoryTitle.textContent = "All Products";
-    }
-}
-init(); 
+import { loadHeaderFooter, getParam } from "./utils.mjs";
 
 loadHeaderFooter();
+
+const category = getParam("category");
+// first create an instance of the ProductData class.
+const dataSource = new ProductData();
+// then get the element you want the product list to render in
+const listElement = document.querySelector(".product-list");
+// then create an instance of the ProductList class and send it the correct information.
+const myList = new ProductList(category, dataSource, listElement);
+// finally call the init method to show the products
+
+const titleElement = document.querySelector(".products__title");
+titleElement.textContent = `Top Products: ${category}`;
+
+myList.init();

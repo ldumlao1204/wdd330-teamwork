@@ -19,7 +19,7 @@ export default class ProductDetails {
         }
         this.renderProductDetails();
         console.log("Rendering complete");  // Add this
-        
+
         const addButton = document.getElementById("addToCart");
         if (addButton) {
             addButton.addEventListener("click", this.addProductToCart.bind(this));
@@ -27,50 +27,23 @@ export default class ProductDetails {
     }
 
     renderProductDetails() {
-        if (!this.product) {
-            console.error("Product data is not available.");
-            return;
-        }
-        console.log("Starting to render. Product:", this.product);
-        
-        const brandElement = document.getElementById("Brand");
-        const nameWithoutBrandElement = document.getElementById("NameWithoutBrand");
-        const imageElement = document.getElementById("Image");
-        const listPriceElement = document.getElementById("ListPrice");
-        const colorsElement = document.getElementById("Colors");
-        const descriptionElement = document.getElementById("DescriptionHtmlSimple");
+        document.getElementById("Brand").textContent = this.product.Brand.Name;
+        document.getElementById("NameWithoutBrand").textContent = this.product.NameWithoutBrand;
+        document.getElementById("Image").src = this.product.Images.PrimaryLarge;
+        document.getElementById("ListPrice").textContent = `$${this.product.ListPrice.toFixed(2)}`;
+        document.getElementById("FinalPrice").textContent = `$${this.product.FinalPrice.toFixed(2)}`;
 
-        console.log("Brand element:", brandElement);
-        console.log("NameWithoutBrand element:", nameWithoutBrandElement);
-        console.log("Image element:", imageElement);
-        console.log("ListPrice element:", listPriceElement);
-        console.log("Colors element:", colorsElement);
-        console.log("Description element:", descriptionElement);
-        
-        if (this.product.Brand) {
-            console.log("Setting brand to:", this.product.Brand.Name);
-            brandElement.textContent = this.product.Brand.Name;
+        const discount = this.product.ListPrice - this.product.FinalPrice;
+        const discountPercent = Math.round((discount / this.product.ListPrice) * 100);
+
+        if (discount > 0) {
+            document.getElementById("Discount").textContent = `You save: $${discount.toFixed(2)} (${discountPercent}% off!)`;
+        } else {
+            document.getElementById("FinalPrice").textContent = "";
         }
-        if (this.product.NameWithoutBrand) {
-            console.log("Setting name without brand to:", this.product.NameWithoutBrand);
-            nameWithoutBrandElement.textContent = this.product.NameWithoutBrand;
-        }
-        if (this.product.Images?.PrimaryLarge) {
-            console.log("Setting image to:", this.product.Images.PrimaryLarge);
-            document.getElementById("Image").src = this.product.Images.PrimaryLarge;
-        }
-        if (this.product.ListPrice) {
-            console.log("Setting list price to:", this.product.ListPrice);
-            document.getElementById("ListPrice").textContent = `$${this.product.ListPrice.toFixed(2)}`;
-        }
-        if (this.product.Colors) {
-            console.log("Setting colors to:", this.product.Colors);
-            document.getElementById("Colors").textContent = this.product.Colors.map(color => color.ColorName).join(" | ");
-        }
-        if (this.product.DescriptionHtmlSimple) {
-            console.log("Setting description to:", this.product.DescriptionHtmlSimple);
-            document.getElementById("DescriptionHtmlSimple").innerHTML = this.product.DescriptionHtmlSimple;
-        }
+
+        document.getElementById("Colors").textContent = this.product.Colors.map(color => color.ColorName).join(" | ");
+        document.getElementById("DescriptionHtmlSimple").innerHTML = this.product.DescriptionHtmlSimple;
     }
 
     async addProductToCart() {

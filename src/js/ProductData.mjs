@@ -1,4 +1,4 @@
-const baseURL = import.meta.env.VITE_SERVER_URL
+const baseURL = import.meta.env.VITE_SERVER_URL;
 
 function convertToJson(res) {
   if (res.ok) {
@@ -24,6 +24,6 @@ export default class ProductData {
   }
 
   async findProductById(id) {
-      return await this.getProductById(id);
+    return await this.getProductById(id);
   }
 }
