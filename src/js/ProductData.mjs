@@ -10,18 +10,20 @@ function convertToJson(res) {
 
 export default class ProductData {
   constructor() {
-
   }
-
   async getData(category) {
     const response = await fetch(`${baseURL}products/search/${category}`);
     const data = await convertToJson(response);
     return data.Result;
   }
 
-  async findProductById(id) {
+  async getProductById(id) {
     const response = await fetch(`${baseURL}product/${id}`);
     const data = await convertToJson(response);
     return data.Result;
+  }
+
+  async findProductById(id) {
+    return await this.getProductById(id);
   }
 }
