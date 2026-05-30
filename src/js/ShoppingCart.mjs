@@ -4,7 +4,7 @@ function cartItemTemplate(item) {
     return `
     <li class="cart-card divider" data-id="${item.Id}">
     <a href="#" class="cart-card__image">
-    <img src="${item.Image}" alt="${item.Name}" />
+    <img src="${item.Images?.PrimaryMedium}" alt="${item.Name}" />
     </a>
     <a href="#">
     <h2 class="card__name">${item.Name}</h2>
@@ -31,10 +31,27 @@ export default class ShoppingCart {
     constructor (listElement) {
         this.listElement = listElement;
         this.items = [];
+        this.total = 0;
     }
 
     init() {
         this.items = getLocalStorage("so-cart") || [];
+        this.calculateTotal();
+    }
+
+    calculateTotal() {
+        this.items.forEach(item => {
+            item.quantity = 1;
+        });
+        this.total = this.items.reduce((sum, item) => {
+            const price = parseFloat(item.FinalPrice) || 0;
+            const quantity = parseInt(item.Quantity) || 1;
+            return sum + (price * quantity);
+        }, 0);
+        const cartTotalElement = document.getElementById("cart-total");
+        if (cartTotalElement) {
+            cartTotalElement.textContent = `Cart Total: $${this.total.toFixed(2)}`;
+        }
     }
 
     render() {

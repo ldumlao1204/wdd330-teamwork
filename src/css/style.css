@@ -185,6 +185,11 @@ button {
   padding: 1rem;
 }
 
+.cart-total {
+  text-align: right;
+  margin: 0.5em 6px;
+}
+
 .section-title {
   padding: 0.5rem;
   margin-top: 1rem;
