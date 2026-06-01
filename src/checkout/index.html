@@ -8,9 +8,9 @@
 
     <title>Sleep Outside | Checkout</title>
 
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
 
-    <script src="../js/checkout.js" type="module"></script>
+    <script src="../js/CheckoutProcess.js" type="module"></script>
   </head>
 
   <body>
@@ -20,6 +20,60 @@
     <main class="divider">
       <section class="products">
         <h2>Review & Place your Order</h2>
+        <p>*Will eventually have product cards form the cart</p>
+      </section>
+      <section class="order-details">
+        <form id="checkout-form" class="checkout-form">
+          <label for="firstname">First Name</label>
+          <input id="firstname" type="text" name="firstname" required />
+          
+          <label for="lastname">Last Name</label>
+          <input id="lastname" type="text" name="lastname" required />
+
+          <hr>
+
+          <label for="street-address">Street Address</label>
+          <textarea id="street-address" name="street-address" required></textarea>
+
+          <label for="city">City</label>
+          <input id="city" type="text" name="city" required />
+
+          <label for="state">State</label>
+          <input id="state" type="text" name="state" required />
+
+          <label for="zip">Zip Code</label>
+          <input id="zip" type="text" name="zip" required />
+
+          <hr>
+
+          <label for="card-number">Card Number</label>
+          <input id="card-number" type="text" name="card-number" required />
+
+          <label for="expiration">Expiration Date</label>
+          <input id="expiration" type="text" name="expiration" placeholder="MM/YY" required />
+
+          <label for="cvv">CVV</label>
+          <input id="cvv" type="text" name="cvv" required />
+
+          <hr>
+
+          <div class="order-summary">
+            <h2>Order Summary</h2>
+            <h4 id="sub-total" class="sub-total">Subtotal: $0.00</h4>
+            <h4 id="tax" class="tax">Tax: $0.00</h4>
+            <h4 id="shipping-estimate" class="shipping-estimate">Shipping Estimate: $0.00</h4>
+            <h3 id="order-total" class="order-total">Order Total: $0.00</h3>
+          </div>
+          <button type="submit" class="btn btn--primary">Place Order</button>
+        </form>
+        <hr>
+      </section>
+      <section class="order-confirmation">
+          <!-- This section can be used to display a confirmation message after the order is placed -->
+          <div id="success-message" style="display:none;">
+          <h3>Order Submitted Successfully!</h3>
+          <p>Your Order ID: <strong id="confirmation-order-id"></strong></p>
+      </div>
       </section>
     </main>
 

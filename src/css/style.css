@@ -3,6 +3,7 @@
   --font-headline: Haettenschweiler, "Arial Narrow Bold", sans-serif;
   /* colors */
   --primary-color: #f0a868;
+  --primary-color-light: #ffe1c6;
   --secondary-color: #525b0f;
   --tertiary-color: #8a470c;
   --light-grey: #d0d0d0;
@@ -185,6 +186,11 @@ button {
   padding: 1rem;
 }
 
+.cart-total {
+  text-align: right;
+  margin: 0.5em 6px;
+}
+
 .section-title {
   padding: 0.5rem;
   margin-top: 1rem;
@@ -356,6 +362,69 @@ button {
   font-size: 1.5em;
 }
 
+/* Checkout Order form */
+.order-details {
+  max-width: 940px;
+  margin: auto;
+  border-top: 2px solid var(--primary-color);
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+.checkout-form label {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  padding: 0.8em;
+  font-size: var(--font-base);
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+}
+
+.checkout-form hr {
+  margin: 1em 0;
+  border: 1px solid var(--primary-color-light);
+}
+
+.checkout-form button {
+  margin-top: 1em;
+  align-self: flex-start;
+}
+
+/* Checkout Confirmation */
+.success-message {
+  color: var(--secondary-color);
+  background:#e8f5e9;
+  display: none;
+  padding:15px; 
+  padding-top: 1em;
+}
+
+.order-confirmation {
+  text-align: center;
+  margin: 1em 0;
+}
+
+.order-details h2 {
+  margin: 0.5em 0;
+}
+
+.order-details h3 {
+  margin: 0.5em 0;
+}
+
+.order-details h4 {
+  margin: 0.25em 8px;
+  color: var(--secondary-color);
+}
+
 
 @media screen and (min-width: 500px) {
   body {
@@ -384,6 +453,19 @@ button {
   .cart-card:hover .cart-card__remove button {
     transform: translateX(0);
     /* Slide in on hover */
+  }
+
+  .checkout-form input {
+    padding: 0.4em;
+    font-size: var(--small-font);
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+  }
+
+  .checkout-form textarea {
+    padding: 0.5em 0 0 0.5em;
+    font-size: var(--small-font);
+    border: 1px solid var(--light-grey);
   }
 }
 
