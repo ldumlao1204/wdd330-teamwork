@@ -39,7 +39,7 @@ export default class CheckoutOrder {
         document.getElementById("sub-total").textContent = `Subtotal: $${this.total.toFixed(2)}`;
         const tax = this.total * this.taxRate;
         document.getElementById("tax").textContent = `Tax (${(this.taxRate * 100).toFixed(0)}%): $${tax.toFixed(2)}`;
-        const shipping = this.total > 0 ? 10 + (this.items.length * 2) : 0.00; // Flat shipping rate of $10 plus 10% of the total if there are items in the cart
+        const shipping = this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00; // Flat shipping rate of $10 plus 10% of the total if there are items in the cart
         document.getElementById("shipping-estimate").textContent = `Shipping: $${shipping.toFixed(2)}`;
         const orderTotal = this.total + tax + shipping;
         document.getElementById("order-total").textContent = `Order Total: $${orderTotal.toFixed(2)}`;
@@ -71,7 +71,7 @@ export default class CheckoutOrder {
             code: document.getElementById("cvv").value,
             items: cartItems,
             orderTotal: (this.total + (this.total * this.taxRate) + (this.total > 0 ? 10 + (this.items.length * 2) : 0.00)).toFixed(2),
-            shipping: (this.total > 0 ? 10 + (this.items.length * 2) : 0.00),
+            shipping: (this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00),
             tax: (this.total * this.taxRate).toFixed(2) // Convert tax to string to match API expectations
         }
 
