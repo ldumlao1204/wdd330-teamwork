@@ -1,4 +1,4 @@
-import { renderListWithTemplate, getLocalStorage, renderCartCount  } from "./utils.mjs";
+import { renderListWithTemplate, getLocalStorage, renderCartCount } from "./utils.mjs";
 
 function cartItemTemplate(item) {
     return `
@@ -10,7 +10,7 @@ function cartItemTemplate(item) {
     <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-    <p class="cart-card__quantity">qty: 1</p>
+    <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
     <p class="cart-card__price">$${item.FinalPrice}</p>
     <div class="cart-card__remove">
     <button class="cart-card__remove-button">
@@ -28,7 +28,7 @@ function removeItem(id) {
 }
 
 export default class ShoppingCart {
-    constructor (listElement) {
+    constructor(listElement) {
         this.listElement = listElement;
         this.items = [];
         this.total = 0;
@@ -53,12 +53,9 @@ export default class ShoppingCart {
             }
             return;
         }
-        this.items.forEach(item => {
-            item.quantity = 1;
-        });
-        this.total = this.items.reduce((sum, item) => {
+            this.total = this.items.reduce((sum, item) => {
             const price = parseFloat(item.FinalPrice) || 0;
-            const quantity = parseInt(item.Quantity) || 1;
+            const quantity = parseInt(item.quantity) || 1;
             return sum + (price * quantity);
         }, 0);
         const cartTotalElement = document.getElementById("cart-total");

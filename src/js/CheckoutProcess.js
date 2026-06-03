@@ -30,12 +30,9 @@ export default class CheckoutOrder {
             return;
         }
         try {
-            this.items.forEach(item => {
-                item.quantity = 1;
-            });
             this.total = this.items.reduce((sum, item) => {
                 const price = parseFloat(item.FinalPrice) || 0;
-                const quantity = parseInt(item.Quantity) || 1;
+                const quantity = parseInt(item.quantity) || 1;
                 return sum + (price * quantity);
             }, 0);
             const cartTotalElement = document.getElementById("cart-total");
@@ -57,7 +54,8 @@ export default class CheckoutOrder {
             document.getElementById("sub-total").textContent = `Subtotal: $${this.total.toFixed(2)}`;
             const tax = this.total * this.taxRate;
             document.getElementById("tax").textContent = `Tax (${(this.taxRate * 100).toFixed(0)}%): $${tax.toFixed(2)}`;
-            const shipping = this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00; // Flat shipping rate of $10 plus 10% of the total if there are items in the cart
+            const totalQuantity = this.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const shipping = this.total > 0 ? 10 + ((totalQuantity - 1) * 2) : 0.00; // Flat shipping rate of $10 plus 10% of the total if there are items in the cart
             document.getElementById("shipping-estimate").textContent = `Shipping: $${shipping.toFixed(2)}`;
             const orderTotal = this.total + tax + shipping;
             document.getElementById("order-total").textContent = `Order Total: $${orderTotal.toFixed(2)}`;
@@ -78,6 +76,8 @@ export default class CheckoutOrder {
 
     async packageItems() {
         const cartItems = this.cartItems();
+        const totalQty = this.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
 
         // Collect order details from the form
         const orderFormDetails = {
@@ -92,10 +92,11 @@ export default class CheckoutOrder {
             expiration: document.getElementById("expiration").value,
             code: document.getElementById("cvv").value,
             items: cartItems,
-            orderTotal: (this.total + (this.total * this.taxRate) + (this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00)).toFixed(2),
-            shipping: (this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00),
-            tax: (this.total * this.taxRate).toFixed(2) // Convert tax to string to match API expectations
+            orderTotal: (this.total + (this.total * this.taxRate) + (this.total > 0 ? 10 + ((totalQty - 1) * 2) : 0.00)).toFixed(2),
+            shipping: (this.total > 0 ? 10 + ((totalQty - 1) * 2) : 0.00),
+            tax: (this.total * this.taxRate).toFixed(2)
         }
+
 
         // package the form details along with the cart items and order total into a single object for submission to the server
         return orderFormDetails;
