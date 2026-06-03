@@ -1,4 +1,4 @@
-import {getLocalStorage, loadHeaderFooter} from "./utils.mjs";
+import {getLocalStorage, loadHeaderFooter, alertMessage} from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 // Create an instance of ExternalServices to use in the submitOrder function
@@ -21,28 +21,50 @@ export default class CheckoutOrder {
     }
 
     calculateTotal() {
-        this.items.forEach(item => {
-            item.quantity = 1;
-        });
-        this.total = this.items.reduce((sum, item) => {
-            const price = parseFloat(item.FinalPrice) || 0;
-            const quantity = parseInt(item.Quantity) || 1;
-            return sum + (price * quantity);
-        }, 0);
-        const cartTotalElement = document.getElementById("cart-total");
-        if (cartTotalElement) {
-            cartTotalElement.textContent = `Cart Total: $${this.total.toFixed(2)}`;
+        if (!this.items || this.items.length === 0) {
+            this.total = 0;
+            const cartTotalElement = document.getElementById("cart-total");
+            if (cartTotalElement) {
+                cartTotalElement.textContent = `Cart Total: $0.00`;
+            }
+            return;
+        }
+        try {
+            this.items.forEach(item => {
+                item.quantity = 1;
+            });
+            this.total = this.items.reduce((sum, item) => {
+                const price = parseFloat(item.FinalPrice) || 0;
+                const quantity = parseInt(item.Quantity) || 1;
+                return sum + (price * quantity);
+            }, 0);
+            const cartTotalElement = document.getElementById("cart-total");
+            if (cartTotalElement) {
+                cartTotalElement.textContent = `Cart Total: $${this.total.toFixed(2)}`;
+            }
+        }
+        catch (error) {
+            console.error("Error calculating total:", error);
         }
     }
 
     renderOrderDetails() {
-        document.getElementById("sub-total").textContent = `Subtotal: $${this.total.toFixed(2)}`;
-        const tax = this.total * this.taxRate;
-        document.getElementById("tax").textContent = `Tax (${(this.taxRate * 100).toFixed(0)}%): $${tax.toFixed(2)}`;
-        const shipping = this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00; // Flat shipping rate of $10 plus 10% of the total if there are items in the cart
-        document.getElementById("shipping-estimate").textContent = `Shipping: $${shipping.toFixed(2)}`;
-        const orderTotal = this.total + tax + shipping;
-        document.getElementById("order-total").textContent = `Order Total: $${orderTotal.toFixed(2)}`;
+        if (!document.getElementById("sub-total") || !document.getElementById("tax") || !document.getElementById("shipping-estimate") || !document.getElementById("order-total")) {
+            console.warn("One or more order detail elements not found. Skipping order details rendering.");
+            return;
+        }
+        try {
+            document.getElementById("sub-total").textContent = `Subtotal: $${this.total.toFixed(2)}`;
+            const tax = this.total * this.taxRate;
+            document.getElementById("tax").textContent = `Tax (${(this.taxRate * 100).toFixed(0)}%): $${tax.toFixed(2)}`;
+            const shipping = this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00; // Flat shipping rate of $10 plus 10% of the total if there are items in the cart
+            document.getElementById("shipping-estimate").textContent = `Shipping: $${shipping.toFixed(2)}`;
+            const orderTotal = this.total + tax + shipping;
+            document.getElementById("order-total").textContent = `Order Total: $${orderTotal.toFixed(2)}`;
+        }
+        catch (error) {
+            console.error("Error rendering order details:", error);
+        }
     }
 
     cartItems() {
@@ -104,31 +126,72 @@ export default class CheckoutOrder {
             // orderTotal: "298.18",
             // shipping: 12,
             // tax: "16.20"
-            // }
+        // }
+
+        // API will return:
+        //{
+            //     message: "Order Placed"
+            //     orderId: 3,
+        // }
     }
 }
 
 async function submitOrder() {
-    const form = document.getElementById("checkout-form");
-    form.addEventListener("submit", async (e) => {  // ← Make this async
-        e.preventDefault();
-        try {
-            const orderData = await checkout.packageItems();  // ← Add await
-            console.log("Order data:", orderData);
-            
-            const response = await externalServices.checkout(orderData);  // ← Add await
-            console.log("Success:", response);
-
-            document.getElementById("confirmation-order-id").textContent = response.orderId;
-            document.getElementById("success-message").style.display = "block";
-            form.reset();  // Clear the form
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    });
+    if (!document.getElementById("checkout-form")) {
+        console.warn("Checkout form not found. Skipping order submission setup.");
+        return;
+    }
+    try {
+        const form = document.getElementById("checkout-form");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            try {
+                const orderData = await checkout.packageItems(); 
+                console.log("Order data:", orderData);
+                
+                const response = await externalServices.checkout(orderData); 
+                console.log("Success:", response);
+    
+                // Store the order ID in localStorage to display on the success page
+                localStorage.setItem("confirmationOrderId", response.orderId);
+    
+                // Redirect to the success page
+                window.location.href = "/checkout/success.html";
+    
+            } catch (error) {
+                console.error("Error:", error);
+                
+                let errorMessage = "An error occurred. Please try again.";
+                
+                if (error.message) {
+                    if (typeof error.message === "string") {
+                        errorMessage = error.message;
+                    } else if (typeof error.message === "object") {
+                        // Combine all validation errors
+                        errorMessage = Object.values(error.message);
+                    }
+                }
+                
+                alertMessage(errorMessage);
+            }
+        });
+    }
+    catch (error) {
+        console.error("Error setting up order submission:", error);
+    }
 }
 
-submitOrder();  // ← Call it at the end
+async function loadConfirmationDetails() {
+    const orderId = localStorage.getItem("confirmationOrderId");
+    if (orderId) {
+        document.getElementById("confirmation-order-id").textContent = orderId;
+        localStorage.removeItem("confirmationOrderId"); // Clear it after displaying
+    }
+}
+
+// initiate checkout promise functions
+submitOrder();
+loadConfirmationDetails();
 
 // Create an instance and initialize it
 const checkout = new CheckoutOrder(/* element for renderList */);

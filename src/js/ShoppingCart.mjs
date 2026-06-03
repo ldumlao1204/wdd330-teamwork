@@ -40,6 +40,19 @@ export default class ShoppingCart {
     }
 
     calculateTotal() {
+        if (!this.items || this.items.length === 0) {
+            this.total = 0;
+            const cartTotalElement = document.getElementById("cart-total");
+            if (cartTotalElement) {
+                cartTotalElement.textContent = `There are no items in your cart.`;
+            }
+
+            const checkoutButton = document.getElementById("checkout-button");
+            if (checkoutButton) {
+                checkoutButton.style.display = "none";
+            }
+            return;
+        }
         this.items.forEach(item => {
             item.quantity = 1;
         });
