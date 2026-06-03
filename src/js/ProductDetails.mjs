@@ -51,10 +51,20 @@ export default class ProductDetails {
         if (!Array.isArray(cartContents)) {
             cartContents = [];
         }
-        cartContents.push(this.product);
+
+        const existingItem = cartContents.find(item => item.Id === this.product.Id);
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + 1;
+            alertMessage(`${this.product.NameWithoutBrand} quantity updated!`, false);
+        } else {
+            this.product.quantity = 1;
+            cartContents.push(this.product);
+            document.querySelectorAll('.alert').forEach(a => a.remove());
+            alertMessage(`${this.product.NameWithoutBrand} added to cart!`, false);
+        }
+
         setLocalStorage("so-cart", cartContents);
         renderCartCount();
-        alertMessage(`${this.product.NameWithoutBrand} added to cart!`, false);
     }
 
 }
