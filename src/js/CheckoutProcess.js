@@ -1,4 +1,4 @@
-import {getLocalStorage, loadHeaderFooter} from "./utils.mjs";
+import { getLocalStorage, loadHeaderFooter, alertMessage} from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 // Create an instance of ExternalServices to use in the submitOrder function
@@ -119,11 +119,14 @@ async function submitOrder() {
             const response = await externalServices.checkout(orderData);  // ← Add await
             console.log("Success:", response);
 
-            document.getElementById("confirmation-order-id").textContent = response.orderId;
-            document.getElementById("success-message").style.display = "block";
             form.reset();  // Clear the form
+            localStorage.removeItem("so-cart");
+            window.location.href = "../checkout/success.html";
         } catch (error) {
             console.error("Error:", error);
+            Object.values(error.message).forEach(msg => alertMessage(msg));
+
+
         }
     });
 }
