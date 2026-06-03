@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { getLocalStorage, loadHeaderFooter, alertMessage} from "./utils.mjs";
-=======
-import {getLocalStorage, loadHeaderFooter, alertMessage} from "./utils.mjs";
->>>>>>> bd2f10acbacaf6a476c437660aeddab22043fbfd
+import { getLocalStorage, loadHeaderFooter, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 // Create an instance of ExternalServices to use in the submitOrder function
@@ -10,7 +6,7 @@ const externalServices = new ExternalServices();
 
 // CheckoutOrder class to manage the checkout process
 export default class CheckoutOrder {
-    constructor (listElement) {
+    constructor(listElement) {
         this.listElement = listElement;
         this.items = [];
         this.total = 0;
@@ -96,7 +92,7 @@ export default class CheckoutOrder {
             expiration: document.getElementById("expiration").value,
             code: document.getElementById("cvv").value,
             items: cartItems,
-            orderTotal: (this.total + (this.total * this.taxRate) + (this.total > 0 ? 10 + (this.items.length * 2) : 0.00)).toFixed(2),
+            orderTotal: (this.total + (this.total * this.taxRate) + (this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00)).toFixed(2),
             shipping: (this.total > 0 ? 10 + ((this.items.length - 1) * 2) : 0.00),
             tax: (this.total * this.taxRate).toFixed(2) // Convert tax to string to match API expectations
         }
@@ -106,63 +102,41 @@ export default class CheckoutOrder {
 
         // API expects:
         // {
-            // orderDate: '2021-01-27T18:18:26.095Z',
-            // fname: "John",
-            // lname: "Doe",
-            // street: "123 Main",
-            // city: "Rexburg",
-            // state: "ID",
-            // zip: "83440",
-            // cardNumber: "1234123412341234",
-            // expiration: "8/21",
-            // code: "123",
-            // items: [{
-            //     id: "20CXG"
-            //     name: "The North Face Pivoter 27 L Backpack"
-            //     price: 39.99,
-            //     quantity: 1
-            // }, {
-            //     id: "14GVF",
-            //     name: "Marmot 5°F Rampart Down Sleeping Bag - 650 Fill, Mummy (For Men and Women)",
-            //     price: 229.99,
-            //     quantity: 1
-            // }],
-            // orderTotal: "298.18",
-            // shipping: 12,
-            // tax: "16.20"
+        // orderDate: '2021-01-27T18:18:26.095Z',
+        // fname: "John",
+        // lname: "Doe",
+        // street: "123 Main",
+        // city: "Rexburg",
+        // state: "ID",
+        // zip: "83440",
+        // cardNumber: "1234123412341234",
+        // expiration: "8/21",
+        // code: "123",
+        // items: [{
+        //     id: "20CXG"
+        //     name: "The North Face Pivoter 27 L Backpack"
+        //     price: 39.99,
+        //     quantity: 1
+        // }, {
+        //     id: "14GVF",
+        //     name: "Marmot 5°F Rampart Down Sleeping Bag - 650 Fill, Mummy (For Men and Women)",
+        //     price: 229.99,
+        //     quantity: 1
+        // }],
+        // orderTotal: "298.18",
+        // shipping: 12,
+        // tax: "16.20"
         // }
 
         // API will return:
         //{
-            //     message: "Order Placed"
-            //     orderId: 3,
+        //     message: "Order Placed"
+        //     orderId: 3,
         // }
     }
 }
 
 async function submitOrder() {
-<<<<<<< HEAD
-    const form = document.getElementById("checkout-form");
-    form.addEventListener("submit", async (e) => {  // ← Make this async
-        e.preventDefault();
-        try {
-            const orderData = await checkout.packageItems();  // ← Add await
-            console.log("Order data:", orderData);
-            
-            const response = await externalServices.checkout(orderData);  // ← Add await
-            console.log("Success:", response);
-
-            form.reset();  // Clear the form
-            localStorage.removeItem("so-cart");
-            window.location.href = "../checkout/success.html";
-        } catch (error) {
-            console.error("Error:", error);
-            Object.values(error.message).forEach(msg => alertMessage(msg));
-
-
-        }
-    });
-=======
     if (!document.getElementById("checkout-form")) {
         console.warn("Checkout form not found. Skipping order submission setup.");
         return;
@@ -172,23 +146,23 @@ async function submitOrder() {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             try {
-                const orderData = await checkout.packageItems(); 
+                const orderData = await checkout.packageItems();
                 console.log("Order data:", orderData);
-                
-                const response = await externalServices.checkout(orderData); 
+
+                const response = await externalServices.checkout(orderData);
                 console.log("Success:", response);
-    
+
                 // Store the order ID in localStorage to display on the success page
                 localStorage.setItem("confirmationOrderId", response.orderId);
-    
+                localStorage.removeItem("so-cart");
                 // Redirect to the success page
                 window.location.href = "/checkout/success.html";
-    
+
             } catch (error) {
                 console.error("Error:", error);
-                
+
                 let errorMessage = "An error occurred. Please try again.";
-                
+
                 if (error.message) {
                     if (typeof error.message === "string") {
                         errorMessage = error.message;
@@ -197,7 +171,7 @@ async function submitOrder() {
                         errorMessage = Object.values(error.message);
                     }
                 }
-                
+
                 alertMessage(errorMessage);
             }
         });
@@ -205,7 +179,6 @@ async function submitOrder() {
     catch (error) {
         console.error("Error setting up order submission:", error);
     }
->>>>>>> bd2f10acbacaf6a476c437660aeddab22043fbfd
 }
 
 async function loadConfirmationDetails() {
