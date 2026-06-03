@@ -1,10 +1,13 @@
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
 function convertToJson(res) {
+  const body = res.json();
   if (res.ok) {
-    return res.json();
+    return body;
   } else {
-    throw new Error("Bad Response");
+    return body.then((err) => {
+      throw {name: "servicesError", message: err || "An error occurred while fetching data"};
+    });
   }
 }
 
