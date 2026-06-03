@@ -115,6 +115,24 @@ button {
   border-bottom: 2px solid var(--primary-color);
 }
 
+.button {
+  text-decoration: none;
+  padding: 0.5em 2em;
+  background-color: var(--secondary-color);
+  color: white;
+  margin: auto;
+  display: block;
+  border: 0;
+  font-size: var(--large-font);
+  cursor: pointer;
+}
+
+#checkout-button {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+}
+
 /* End utility classes */
 
 /* Cart icon styles */
@@ -430,6 +448,12 @@ button {
   body {
     max-width: 1080px;
     margin: auto;
+  }
+  
+  #checkout-button:hover {
+    background-color: var(--tertiary-color);
+    padding: 0.6em 2.5em;
+    transition: all 0.3s ease;
   }
 
   .mission {
