@@ -30,11 +30,11 @@ export default class ProductDetails {
         document.getElementById("Brand").textContent = this.product.Brand.Name;
         document.getElementById("NameWithoutBrand").textContent = this.product.NameWithoutBrand;
         document.getElementById("Image").src = this.product.Images.PrimaryLarge;
-        document.getElementById("ListPrice").textContent = `$${this.product.ListPrice.toFixed(2)}`;
+        document.getElementById("ListPrice").textContent = `$${this.product.SuggestedRetailPrice.toFixed(2)}`;
         document.getElementById("FinalPrice").textContent = `$${this.product.FinalPrice.toFixed(2)}`;
 
-        const discount = this.product.ListPrice - this.product.FinalPrice;
-        const discountPercent = Math.round((discount / this.product.ListPrice) * 100);
+        const discount = this.product.SuggestedRetailPrice - this.product.FinalPrice;
+        const discountPercent = Math.round((discount / this.product.SuggestedRetailPrice) * 100);
 
         if (discount > 0) {
             document.getElementById("Discount").textContent = `You save: $${discount.toFixed(2)} (${discountPercent}% off!)`;
