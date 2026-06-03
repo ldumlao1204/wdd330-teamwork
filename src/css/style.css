@@ -8,6 +8,8 @@
   --tertiary-color: #8a470c;
   --light-grey: #d0d0d0;
   --dark-grey: #303030;
+  --alert-background: #e53935;
+  --alert-color: white;
 
   /* sizes */
   --font-base: 18px;
@@ -39,6 +41,24 @@ header {
 
 p {
   padding: 0.75rem;
+}
+
+.alert {
+  background-color: var(--alert-background);
+  color: var(--alert-color);
+  padding:0;
+  text-align: center;
+}
+
+.alert li {
+  list-style-type: none;
+  border-bottom: 1px solid var(--alert-color);
+  padding: 0.5em 0;
+}
+
+.alert li:hover {
+  background-color: #d32f2f;
+  cursor: pointer;
 }
 
 .logo {
@@ -113,6 +133,24 @@ button {
 
 .divider {
   border-bottom: 2px solid var(--primary-color);
+}
+
+.button {
+  text-decoration: none;
+  padding: 0.5em 2em;
+  background-color: var(--secondary-color);
+  color: white;
+  margin: auto;
+  display: block;
+  border: 0;
+  font-size: var(--large-font);
+  cursor: pointer;
+}
+
+#checkout-button {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
 }
 
 /* End utility classes */
@@ -399,30 +437,9 @@ button {
 }
 
 /* Checkout Confirmation */
-.success-message {
-  color: var(--secondary-color);
-  background:#e8f5e9;
-  display: none;
-  padding:15px; 
-  padding-top: 1em;
-}
-
-.order-confirmation {
+.checkout-success {
   text-align: center;
-  margin: 1em 0;
-}
-
-.order-details h2 {
-  margin: 0.5em 0;
-}
-
-.order-details h3 {
-  margin: 0.5em 0;
-}
-
-.order-details h4 {
-  margin: 0.25em 8px;
-  color: var(--secondary-color);
+  padding: 2em;
 }
 
 
@@ -430,6 +447,12 @@ button {
   body {
     max-width: 1080px;
     margin: auto;
+  }
+  
+  #checkout-button:hover {
+    background-color: var(--tertiary-color);
+    padding: 0.6em 2.5em;
+    transition: all 0.3s ease;
   }
 
   .mission {

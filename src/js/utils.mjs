@@ -71,6 +71,45 @@ export function renderCartCount() {
   cartCountElement.textContent = totalCount;
 }
 
+export function alertMessage(message, scroll=true) {
+  const alert = document.createElement("div");
+  const main = document.querySelector("main");
+
+  alert.classList.add("alert");
+  
+  // Handle both string messages and arrays of errors
+  if (Array.isArray(message)) {
+    const ul = document.createElement("ul");
+    message.forEach(error => {
+      const li = document.createElement("li");
+      li.textContent = error;
+      ul.appendChild(li);
+    });
+    alert.appendChild(ul);
+  } else {
+    alert.textContent = message;
+  }
+  
+  alert.addEventListener("click", function(e) {
+    if (e.currentTarget === alert) {
+      main.removeChild(alert);
+    }
+  });
+  
+  // Insert at the TOP of main instead of the end
+  main.insertAdjacentElement("afterbegin", alert);
+  
+  if (scroll) {
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+}
+
+export function removeAllAlerts() {
+  const main = document.querySelector("main");
+  const alerts = main.querySelectorAll(".alert");
+  alerts.forEach(alert => main.removeChild(alert));
+}
+
 export async function loadHeaderFooter() {
 
   const headerTemplate = await loadTemplate("../partials/header.html");
