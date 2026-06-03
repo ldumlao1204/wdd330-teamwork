@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import { getLocalStorage, loadHeaderFooter, alertMessage} from "./utils.mjs";
+=======
 import {getLocalStorage, loadHeaderFooter, alertMessage} from "./utils.mjs";
+>>>>>>> bd2f10acbacaf6a476c437660aeddab22043fbfd
 import ExternalServices from "./ExternalServices.mjs";
 
 // Create an instance of ExternalServices to use in the submitOrder function
@@ -137,6 +141,28 @@ export default class CheckoutOrder {
 }
 
 async function submitOrder() {
+<<<<<<< HEAD
+    const form = document.getElementById("checkout-form");
+    form.addEventListener("submit", async (e) => {  // ← Make this async
+        e.preventDefault();
+        try {
+            const orderData = await checkout.packageItems();  // ← Add await
+            console.log("Order data:", orderData);
+            
+            const response = await externalServices.checkout(orderData);  // ← Add await
+            console.log("Success:", response);
+
+            form.reset();  // Clear the form
+            localStorage.removeItem("so-cart");
+            window.location.href = "../checkout/success.html";
+        } catch (error) {
+            console.error("Error:", error);
+            Object.values(error.message).forEach(msg => alertMessage(msg));
+
+
+        }
+    });
+=======
     if (!document.getElementById("checkout-form")) {
         console.warn("Checkout form not found. Skipping order submission setup.");
         return;
@@ -179,6 +205,7 @@ async function submitOrder() {
     catch (error) {
         console.error("Error setting up order submission:", error);
     }
+>>>>>>> bd2f10acbacaf6a476c437660aeddab22043fbfd
 }
 
 async function loadConfirmationDetails() {
