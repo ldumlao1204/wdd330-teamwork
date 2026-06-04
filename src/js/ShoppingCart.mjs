@@ -13,16 +13,22 @@ function cartItemTemplate(item) {
     <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
     <p class="cart-card__price">$${item.FinalPrice}</p>
     <div class="cart-card__remove">
-    <button class="cart-card__remove-button">
-    <span class="material-symbols-outlined">X</span>
-    </button>
-    </li>
-    </div>`;
+    <button class="cart-card__qty-plus">+</button>
+    <button class="cart-card__qty-minus">-</button>
+    </div>
+    </li>`;
 }
 
-function removeItem(id) {
+function updateItemQuantity(id, delta) {
     let cartItems = getLocalStorage("so-cart") || [];
-    cartItems = cartItems.filter(item => item.Id !== id);
+    
+    cartItems = cartItems.map(item => {
+        if (item.Id === id) {
+            item.quantity = (item.quantity || 1) + delta;
+        }
+        return item;
+    }).filter(item => item.quantity > 0);
+    
     localStorage.setItem("so-cart", JSON.stringify(cartItems));
     renderCartCount();
 }
@@ -37,6 +43,7 @@ export default class ShoppingCart {
     init() {
         this.items = getLocalStorage("so-cart") || [];
         this.calculateTotal();
+        this.setupEventListeners();
     }
 
     calculateTotal() {
@@ -66,7 +73,6 @@ export default class ShoppingCart {
 
     render() {
         this.renderList(this.items);
-        this.setupEventListeners();
     }
 
     renderList(list) {
@@ -75,11 +81,20 @@ export default class ShoppingCart {
 
     setupEventListeners() {
         this.listElement.addEventListener("click", (event) => {
-            if (event.target.closest(".cart-card__remove-button")) {
-                const card = event.target.closest(".cart-card");
-                const itemId = card.getAttribute("data-id");
-                removeItem(itemId);
-                this.init(); // Refresh items from localStorage
+            const card = event.target.closest(".cart-card");
+            if (!card) return;
+            
+            const itemId = card.getAttribute("data-id");
+            
+            if (event.target.closest(".cart-card__qty-minus")) {
+                updateItemQuantity(itemId, -1);
+                this.items = getLocalStorage("so-cart") || [];
+                this.calculateTotal();
+                this.render();
+            } else if (event.target.closest(".cart-card__qty-plus")) {
+                updateItemQuantity(itemId, 1);
+                this.items = getLocalStorage("so-cart") || [];
+                this.calculateTotal();
                 this.render();
             }
         });
